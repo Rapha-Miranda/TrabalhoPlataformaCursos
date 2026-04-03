@@ -1,0 +1,862 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Cursos</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Reset e Fontes base */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --secondary: #ec4899;
+      --text-light: #f8fafc;
+      --text-muted: #cbd5e1;
+      --glass-bg: rgba(30, 41, 59, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-light);
+      min-height: 100vh;
+    }
+
+    /* Tipografia Estilizada */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-light);
+    }
+
+    /* Glassmorphism e Cards */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-light);
+    }
+
+    .card-header {
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .card-footer {
+      border-top: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Inputs e Formulários */
+    .form-control,
+    .form-select {
+      background-color: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--glass-border);
+      color: var(--text-light);
+      border-radius: 0.5rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background-color: rgba(15, 23, 42, 0.9);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+      color: var(--text-light);
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Botões */
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      font-weight: 600;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: scale(1.02);
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary));
+      border: none;
+      color: white;
+      font-weight: 600;
+    }
+
+    .btn-gradient:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+
+    /* Tabelas */
+    .table {
+      color: var(--text-light);
+      --bs-table-bg: transparent;
+      --bs-table-color: var(--text-light);
+    }
+
+    .table-dark {
+      --bs-table-bg: rgba(0, 0, 0, 0.2);
+    }
+
+    .table-striped>tbody>tr:nth-of-type(odd)>* {
+      --bs-table-accent-bg: rgba(255, 255, 255, 0.02);
+      color: var(--text-light);
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(15, 23, 42, 0.8) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-link {
+      color: var(--text-light) !important;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color) !important;
+    }
+
+    /* Modais */
+    .modal-content {
+      background: var(--bg-dark);
+      border: 1px solid var(--glass-border);
+      color: var(--text-light);
+    }
+
+    .modal-header,
+    .modal-footer {
+      border-color: var(--glass-border);
+    }
+
+    /* Utilidades Customizadas */
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-glass {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-light);
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-hover);
+    }
+
+    .page-view {
+      display: none;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    .text-muted {
+      color: var(--text-muted) !important;
+    }
+  </style>
+</head>
+
+<body class="bg-dark">
+
+  <div id="view-index" class="page-view active">
+
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#" onclick="navigateTo('view-index'); return false;">
+          🚀 DevMastery
+        </a>
+        <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navContent">
+          <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="#trilhas">Trilhas</a></li>
+            <li class="nav-item"><a class="nav-link" href="#planos">Planos</a></li>
+          </ul>
+          <div class="nav-right d-flex align-items-center">
+            <!-- Injetado via App.setupNavigation -->
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-5 text-center container-fluid"
+      style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;">
+      <div class="row py-lg-5 position-relative z-1">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="display-3 fw-bold mb-4">Alcance o <span class="text-gradient">Próximo Nível</span> na sua
+            Carreira
+          </h1>
+          <p class="lead text-muted mb-5 px-md-5">Aprenda na prática com dezenas de cursos, ganhe certificados
+            verificados e conecte-se com projetos reais construídos para escalar. Feito com rigor e amor.</p>
+          <p>
+            <a href="#" onclick="navigateTo('view-checkout'); return false;"
+              class="btn btn-gradient btn-lg my-2 px-5 py-3 rounded-pill">Comece Agora</a>
+            <button type="button" class="btn btn-outline-light btn-lg my-2 px-5 py-3 rounded-pill ms-3"
+              data-bs-toggle="modal" data-bs-target="#loginModal">Já sou aluno</button>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trilhas Section -->
+    <section id="trilhas" class="container py-5">
+      <h2 class="text-center mb-5 pb-3">Nossas Trilhas de Aprendizado</h2>
+      <div class="row row-cols-1 row-cols-md-3 g-4 w-75 mx-auto">
+        <div class="col">
+          <div class="card glass-card h-100 text-center p-4">
+            <h5 class="fw-bold text-light">Front-end</h5>
+            <p class="text-muted small mt-2">Do básico ao React & Vue.js.</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card glass-card h-100 text-center p-4 border-primary">
+            <h5 class="fw-bold text-gradient">Back-end</h5>
+            <p class="text-muted small mt-2">Node.js, Bancos de Dados e APIs.</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card glass-card h-100 text-center p-4">
+            <h5 class="fw-bold text-light">UX/UI Design</h5>
+            <p class="text-muted small mt-2">Experiência e interfaces uau.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Planos Resumo -->
+    <section id="planos" class="container py-5">
+      <h2 class="text-center mb-5 pb-3">Escolha seu Caminho</h2>
+      <div class="row row-cols-1 row-cols-md-2 g-4 w-75 mx-auto" id="plans-container">
+        <!-- Card Plan 1 -->
+        <div class="col">
+          <div class="card glass-card h-100 text-center p-4">
+            <div class="card-body">
+              <h5 class="card-title text-muted fw-bold">Plano Básico</h5>
+              <h2 class="my-3 font-monospace fw-bold">R$ 29,90<span class="fs-6 text-muted fw-normal">/mês</span></h2>
+              <p class="card-text text-muted">Acesso aos cursos para iniciantes. Ótimo para começar.</p>
+              <a href="#" onclick="navigateTo('view-checkout'); return false;"
+                class="btn btn-outline-primary w-100 my-2 mt-4 rounded-pill">Assinar Básico</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card Plan 2 -->
+        <div class="col">
+          <div class="card glass-card h-100 text-center p-4 border-primary"
+            style="box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);">
+            <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary px-3 py-2">
+              Recomendado
+            </div>
+            <div class="card-body">
+              <h5 class="card-title text-gradient fw-bold">Plano PRO</h5>
+              <h2 class="my-3 font-monospace fw-bold">R$ 69,90<span class="fs-6 text-muted fw-normal">/mês</span></h2>
+              <p class="card-text mb-4 text-muted">Acesso ilimitado, todas as trilhas e recursos premium.</p>
+              <a href="#" onclick="navigateTo('view-checkout'); return false;"
+                class="btn btn-gradient w-100 mt-3 rounded-pill py-2">Assinar PRO</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info -->
+    <div class="container text-center py-5 mt-5">
+      <p class="text-muted small">
+        Credenciais de Teste <br>
+        Admin: admin@plataforma.com / admin123 <br>
+        Aluno: aluno@plataforma.com / 123456
+      </p>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade glass-modal" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered border-0">
+        <div class="modal-content glass-card p-4">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold" id="loginModalLabel">Acesso à Plataforma</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted small text-center mb-4">Ainda não tem conta? <a href="#" data-bs-dismiss="modal"
+                data-bs-toggle="modal" data-bs-target="#registerModal"
+                class="text-gradient fw-bold text-decoration-none">Cadastre-se agora</a>.</p>
+            <form id="formLogin">
+              <div class="mb-4">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-control form-control-lg" id="loginEmail" placeholder="seu@email.com"
+                  required>
+              </div>
+              <div class="mb-4">
+                <label for="loginPassword" class="form-label">Senha</label>
+                <input type="password" class="form-control form-control-lg" id="loginPassword" required>
+              </div>
+              <button type="submit" class="btn btn-gradient btn-lg w-100 rounded-pill">Entrar na Sala de Aula</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade glass-modal" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered border-0">
+        <div class="modal-content glass-card p-4">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold" id="registerModalLabel">Criar Nova Conta</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted small text-center mb-4">Já tem uma conta? <a href="#" data-bs-dismiss="modal"
+                data-bs-toggle="modal" data-bs-target="#loginModal"
+                class="text-gradient fw-bold text-decoration-none">Faça login</a>.</p>
+            <form id="formRegister">
+              <div class="mb-3">
+                <label for="regNome" class="form-label">Nome Completo</label>
+                <input type="text" class="form-control form-control-lg" id="regNome" required>
+              </div>
+              <div class="mb-3">
+                <label for="regEmail" class="form-label">Email</label>
+                <input type="email" class="form-control form-control-lg" id="regEmail" required>
+              </div>
+              <div class="mb-4">
+                <label for="regSenha" class="form-label">Senha</label>
+                <input type="password" class="form-control form-control-lg" id="regSenha" required>
+              </div>
+              <button type="submit" class="btn btn-secondary btn-lg w-100 rounded-pill">Cadastrar e Entrar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts: Bootstrap Bundle & Custom JS -->
+
+
+
+
+
+
+  </div>
+
+  <div id="view-checkout" class="page-view">
+
+
+    <div class="container my-5">
+      <!-- Se não logado -->
+      <div id="checkoutAuthWarning" class="alert alert-warning border-0 glass-card d-none" role="alert">
+        <strong>Atenção:</strong> Você precisa estar logado como Aluno para prosseguir com a assinatura.
+        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="alert-link">Clique aqui para fazer login
+          ou cadastro</a>.
+      </div>
+
+      <!-- Se logado -->
+      <div id="checkoutArea" class="row row-cols-1 row-cols-lg-2 g-5">
+        <!-- Coluna: Seleção de Plano -->
+        <div class="col">
+          <h3 class="fw-bold mb-4">Escolha seu Plano</h3>
+          <div class="list-group" id="planosSelectGroup">
+            <!-- Renderizado via JS -->
+          </div>
+
+          <div class="mt-4 p-4 glass-card border-primary" style="box-shadow: inset 0 0 10px rgba(99,102,241,0.2);">
+            <h5 class="fw-bold"><span class="text-gradient">Total a pagar:</span> <span id="priceDisplay">R$ 0,00</span>
+            </h5>
+            <p class="text-muted small m-0">Renovação automática mensal. Cancele quando quiser.</p>
+          </div>
+        </div>
+
+        <!-- Coluna: Pagamento e Registro -->
+        <div class="col">
+          <div class="card glass-card p-4">
+            <h4 class="fw-bold mb-4">Dados de Pagamento</h4>
+            <form id="formCheckout">
+              <div class="mb-3">
+                <label class="form-label">Nome Impresso no Cartão</label>
+                <input type="text" class="form-control form-control-lg" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Número do Cartão</label>
+                <input type="text" class="form-control form-control-lg" placeholder="1234 5678 9876 5432" maxlength="19"
+                  required>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Validade</label>
+                  <input type="text" class="form-control" placeholder="MM/AA" maxlength="5" required>
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label">CVV</label>
+                  <input type="text" class="form-control" placeholder="123" maxlength="3" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-gradient btn-lg w-100 mt-4 disabled" id="btnAssinar">Finalizar
+                Assinatura</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div class="modal fade glass-modal" id="successModal" data-bs-backdrop="static" tabindex="-1">
+      <div class="modal-dialog border-0 modal-dialog-centered">
+        <div class="modal-content glass-card p-5 text-center">
+          <div class="modal-body">
+            <h1 class="display-1">🎉</h1>
+            <h3 class="fw-bold mt-4 text-gradient">Pagamento Aprovado!</h3>
+            <p class="text-muted">ID da Transação: <span id="txnIdDisplay" class="font-monospace text-primary"></span>
+            </p>
+            <a href="#" onclick="navigateTo('view-dashboard-user'); return false;"
+              class="btn btn-primary w-100 mt-4 py-2 rounded-pill">Ir para meu Painel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+  <div id="view-dashboard-admin" class="page-view">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#" onclick="navigateTo('view-index'); return false;">🚀 DevMastery Admin</a>
+        <div class="nav-right ms-auto d-flex align-items-center"></div>
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      <!-- Abas Admin -->
+      <ul class="nav nav-tabs mb-4 border-0" id="adminTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active bg-transparent text-light border-0 fw-bold border-bottom border-primary"
+            data-bs-toggle="tab" data-bs-target="#tab-categorias">Categorias</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link bg-transparent text-muted border-0 fw-bold border-bottom border-secondary"
+            data-bs-toggle="tab" data-bs-target="#tab-cursos">Cursos & Conteúdo</button>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link bg-transparent text-muted border-0 fw-bold border-bottom border-warning"
+            data-bs-toggle="tab" data-bs-target="#tab-trilhas">Trilhas</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="adminTabsContent">
+        <!-- ABA CATEGORIAS -->
+        <div class="tab-pane fade show active" id="tab-categorias" role="tabpanel">
+          <div class="card glass-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold">Gestão de Categorias</h4>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCategoria">Nova
+                Categoria</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaCategorias"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA CURSOS E CONTEÚDO -->
+        <div class="tab-pane fade" id="tab-cursos" role="tabpanel">
+          <div class="card glass-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold">Catálogo de Cursos</h4>
+              <div>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalCurso">Novo
+                  Curso</button>
+                <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalAula">Adicionar
+                  Conteúdo (Aulas)</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Título</th>
+                    <th>Nível</th>
+                    <th>Instrutor</th>
+                    <th>Categoria</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaCursos"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA TRILHAS -->
+      <div class="tab-pane fade mt-4" id="tab-trilhas" role="tabpanel" data-bs-parent="#adminTabsContent">
+        <div class="card glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold">Gestão de Trilhas</h4>
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTrilha">Nova Trilha</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Categoria</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaTrilhas"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nova Categoria -->
+    <div class="modal fade glass-modal" id="modalCategoria" tabindex="-1">
+      <div class="modal-dialog border-0 modal-dialog-centered">
+        <div class="modal-content glass-card p-3">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold">Criar Categoria</h5><button type="button" class="btn-close btn-close-white"
+              data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formCategoria">
+              <div class="mb-3"><label class="form-label">Nome da Categoria</label><input type="text"
+                  class="form-control" id="catNome" required></div>
+              <div class="mb-3"><label class="form-label">Descrição</label><textarea class="form-control" id="catDesc"
+                  rows="3"></textarea></div>
+              <button type="submit" class="btn btn-primary w-100 mt-2">Salvar Categoria</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Novo Curso -->
+    <div class="modal fade glass-modal" id="modalCurso" tabindex="-1">
+      <div class="modal-dialog border-0 modal-dialog-centered">
+        <div class="modal-content glass-card p-3">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold">Criar Curso</h5><button type="button" class="btn-close btn-close-white"
+              data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formCurso">
+              <div class="mb-3"><label class="form-label">Título do Curso</label><input type="text" class="form-control"
+                  id="curTitulo" required></div>
+              <div class="mb-3"><label class="form-label">Categoria</label><select class="form-select" id="curCategoria"
+                  required></select></div>
+              <div class="mb-3"><label class="form-label">Instrutor Associado</label><select class="form-select"
+                  id="curInstrutor" required></select></div>
+              <div class="mb-3"><label class="form-label">Nível</label>
+                <select class="form-select" id="curNivel" required>
+                  <option value="Iniciante">Iniciante</option>
+                  <option value="Intermediário">Intermediário</option>
+                  <option value="Avançado">Avançado</option>
+                </select>
+              </div>
+              <div class="mb-3"><label class="form-label">Descrição Breve</label><textarea class="form-control"
+                  id="curDesc" rows="2"></textarea></div>
+              <button type="submit" class="btn btn-primary w-100 mt-2">Gravar Curso no Banco</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Editar Curso -->
+    <div class="modal fade glass-modal" id="modalEditarCurso" tabindex="-1">
+      <div class="modal-dialog border-0 modal-dialog-centered">
+        <div class="modal-content glass-card p-3">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold">Editar Curso</h5><button type="button" class="btn-close btn-close-white"
+              data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formEditarCurso">
+              <input type="hidden" id="editCurId">
+              <div class="mb-3"><label class="form-label">Título do Curso</label><input type="text" class="form-control"
+                  id="editCurTitulo" required></div>
+              <div class="mb-3"><label class="form-label">Categoria</label><select class="form-select"
+                  id="editCurCategoria" required></select></div>
+              <div class="mb-3"><label class="form-label">Instrutor Associado</label><select class="form-select"
+                  id="editCurInstrutor" required></select></div>
+              <div class="mb-3"><label class="form-label">Nível</label>
+                <select class="form-select" id="editCurNivel" required>
+                  <option value="Iniciante">Iniciante</option>
+                  <option value="Intermediário">Intermediário</option>
+                  <option value="Avançado">Avançado</option>
+                </select>
+              </div>
+              <div class="mb-3"><label class="form-label">Descrição Breve</label><textarea class="form-control"
+                  id="editCurDesc" rows="2"></textarea></div>
+              <button type="submit" class="btn btn-warning w-100 mt-2">Atualizar Curso</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nova Aula (Simplificado, sem gerir Módulo isoladamente na UI p/ poupar tempo, cria módulo dummy) -->
+    <div class="modal fade glass-modal" id="modalAula" tabindex="-1">
+      <div class="modal-dialog border-0 modal-dialog-centered">
+        <div class="modal-content glass-card p-3">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold">Adicionar Aula ao Curso</h5><button type="button"
+              class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info border-0 bg-primary text-white bg-opacity-25 shadow-none pb-1 pt-2">
+              <p class="small">Nota: Ao adicionar uma aula, ela será automaticamente vinculada ao "Módulo 1" padrão
+                do curso selecionado (criado on-the-fly).</p>
+            </div>
+            <form id="formAula">
+              <div class="mb-3"><label class="form-label">Selecione o Curso</label><select class="form-select"
+                  id="aulaCurso" required></select></div>
+              <div class="mb-3"><label class="form-label">Título da Aula</label><input type="text" class="form-control"
+                  id="aulaTitulo" required></div>
+              <div class="mb-3"><label class="form-label">Tipo de Conteúdo</label>
+                <select class="form-select" id="aulaTipo" required>
+                  <option value="Vídeo">Vídeo</option>
+                  <option value="Texto">Texto</option>
+                  <option value="Quiz">Quiz</option>
+                </select>
+              </div>
+              <div class="mb-3"><label class="form-label">URL do Vídeo (YouTube / Shorts)</label><input type="text"
+                  class="form-control" id="aulaUrl" placeholder="Cole o link do YouTube aqui..."></div>
+              <div class="mb-3"><label class="form-label">Duração (Min)</label><input type="number" class="form-control"
+                  id="aulaMin" min="1" required></div>
+              <button type="submit" class="btn btn-primary w-100 mt-2">Salvar Aula</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal: Nova Trilha -->
+    <div class="modal fade glass-modal" id="modalTrilha" tabindex="-1">
+      <div class="modal-dialog border-0 modal-dialog-centered">
+        <div class="modal-content glass-card p-3">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold">Criar Trilha</h5><button type="button" class="btn-close btn-close-white"
+              data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formTrilha">
+              <div class="mb-3"><label class="form-label">Título da Trilha</label><input type="text"
+                  class="form-control" id="triTitulo" required></div>
+              <div class="mb-3"><label class="form-label">Categoria</label><select class="form-select" id="triCategoria"
+                  required></select></div>
+              <div class="mb-3"><label class="form-label">Descrição</label><textarea class="form-control" id="triDesc"
+                  rows="3"></textarea></div>
+              <button type="submit" class="btn btn-warning w-100 mt-2">Salvar Trilha</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+  <div id="view-dashboard-user" class="page-view">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#" onclick="navigateTo('view-index'); return false;">🚀 DevMastery</a>
+        <div class="nav-right ms-auto d-flex align-items-center"></div>
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      <div class="row mb-4 align-items-center">
+        <div class="col">
+          <h2 class="fw-bold m-0"><span class="text-gradient">Meu Painel</span> de Estudos</h2>
+        </div>
+      </div>
+
+      <!-- Abas -->
+      <ul class="nav nav-pills mb-4" id="userTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#meusCursos" type="button"
+            role="tab">Meus Cursos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#certificados" type="button"
+            role="tab">Certificados</button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- Aba: Meus Cursos -->
+        <div class="tab-pane fade show active" id="meusCursos" role="tabpanel">
+          <div class="row row-cols-1 row-cols-md-3 g-4" id="listaCursosEnrolados">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+
+        <!-- Aba: Certificados -->
+        <div class="tab-pane fade" id="certificados" role="tabpanel">
+          <div class="card glass-card p-4 text-center">
+            <h4>Seus Certificados Conquistados</h4>
+            <ul class="list-group list-group-flush mt-3" id="listaCertificados">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Sala de Aula -->
+    <div class="modal fade" id="salaAulaModal" tabindex="-1">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable border-0">
+        <div class="modal-content glass-card p-2">
+          <div class="modal-header border-0 pb-0">
+            <h4 class="modal-title fw-bold" id="salaCursoTitulo">Carregando...</h4>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-4 row">
+            <div class="col-md-4 border-end" style="border-color: var(--glass-border) !important;">
+              <h5 class="text-muted">Conteúdo do Curso</h5>
+              <div class="accordion accordion-flush mt-3" id="modulosAccordion">
+                <!-- Renderizado via JS -->
+              </div>
+
+              <div class="mt-4 pt-4 border-top" style="border-color: var(--glass-border) !important;">
+                <p>Progresso: <strong id="cursoProgressoPercent">0%</strong></p>
+                <div class="progress mb-3" style="height: 10px; background: rgba(0,0,0,0.3);">
+                  <div id="cursoProgressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                </div>
+                <button id="btnEmitirCertificado" class="btn btn-outline-success w-100 d-none">Emitir
+                  Certificado</button>
+              </div>
+            </div>
+            <div class="col-md-8 px-4" id="aulaVisor">
+              <div class="h-100 d-flex flex-column align-items-center justify-content-center text-center text-muted">
+                <span class="fs-1">📚</span>
+                <p class="mt-3">Selecione uma aula no menu lateral para começar.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>
